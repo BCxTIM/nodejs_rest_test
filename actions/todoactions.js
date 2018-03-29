@@ -60,9 +60,18 @@ exports.createTodo = function (status, error, todo, callback) {
                 res.body.data.should.equal("Task could not be empty");
             } else {
                 res.body.data.task.should.equal(todo.task);
+                if (isEmpty(todo.status)) {
+                    res.body.data.status.should.equal(1);
+                } else {
+                    res.body.data.status.should.equal(todo.status);
+                }
             }
             callback(res.body);
         });
 };
 
+
+function isEmpty(value) {
+    return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
+}
 
