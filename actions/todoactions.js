@@ -28,7 +28,7 @@ exports.getAllTasks = function (status, error) {
  * @boolean error
  */
 
-exports.getTaskById = function (id, status, error) {
+exports.getTaskById = function (id, status, error, done) {
     api
         .get('/todo/' + id)
         .end(function (err, res) {
@@ -37,7 +37,9 @@ exports.getTaskById = function (id, status, error) {
             if (res.body.error) {
                 res.body.data.should.equal("Task with id " + id + " not found");
             }
+            done();
         });
+
 };
 
 /**
