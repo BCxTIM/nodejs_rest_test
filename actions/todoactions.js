@@ -12,7 +12,7 @@ var should = require('should');
  * @HTTP status
  * @boolean error
  */
-exports.getAllTasks = function (status, error) {
+exports.getAllTodos = function (status, error) {
     api
         .get('/todos')
         .end(function (err, res) {
@@ -28,7 +28,7 @@ exports.getAllTasks = function (status, error) {
  * @boolean error
  */
 
-exports.getTaskById = function (id, status, error) {
+exports.getTodoById = function (id, status, error, callback) {
     api
         .get('/todo/' + id)
         .end(function (err, res) {
@@ -37,8 +37,8 @@ exports.getTaskById = function (id, status, error) {
             if (res.body.error) {
                 res.body.data.should.equal("Task with id " + id + " not found");
             }
+            callback(res.body);
         });
-
 };
 
 /**
@@ -70,6 +70,21 @@ exports.createTodo = function (status, error, todo, callback) {
         });
 };
 
+/**
+ * Verify body from todo
+ * @param id
+ * @param expectedTodo
+ * @param actualTodo
+ */
+
+exports.verifyTodoBodyById = function (id, expectedTodo, actualTodo) {
+    actualTodo.data.task.should.equal(expectedTodo.task);
+    if (isEmpty(expectedTodo.status)) {
+        actualTodo.data.status.should.equal(1);
+    } else {
+        actualTodo.data.status.should.equal(expectedTodo.status);
+    }
+};
 
 function isEmpty(value) {
     return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
