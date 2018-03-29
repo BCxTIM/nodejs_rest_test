@@ -14,19 +14,22 @@ describe("Get todos", function () {
 
     describe('#GET / todo by existing id', function () {
         it("Should get todo by id", function (done) {
-            todoactions.getTaskById(1, 200, false, done);
+            todoactions.getTaskById(1, 200, false);
+            done();
         })
     });
 
     describe('#GET / todo by not existing id', function () {
         it("should not get task by not existing id", function (done) {
-            todoactions.getTaskById(666, 400, true, done);
+            todoactions.getTaskById(666, 400, true);
+            done();
         });
     });
 
     describe('#GET / todo by not incorrect id', function () {
         it("should not get task by incorrect id", function (done) {
-            todoactions.getTaskById("dsadsad", 400, true, done);
+            todoactions.getTaskById("dsadsad", 400, true);
+            done();
         });
     });
 });
@@ -44,7 +47,8 @@ describe("Testing creation todo", function () {
         });
 
         it("Should verify new todo if is created", function (done) {
-            todoactions.getTaskById(response.data.id, 200, false, done);
+            todoactions.getTaskById(response.data.id, 200, false);
+            done();
         });
 
     });
@@ -60,7 +64,8 @@ describe("Testing creation todo", function () {
         });
 
         it("Should verify that new todo is not created", function (done) {
-            todoactions.getTaskById(response.data.id, 400, true, done);
+            todoactions.getTaskById(response.data.id, 400, true);
+            done();
         });
     });
 });
