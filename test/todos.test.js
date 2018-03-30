@@ -3,13 +3,11 @@
 var todoactions = require('../actions/todoactions');
 var Todo = require('../models/todo');
 
-
 describe("Get todos", function () {
     describe('#GET / todos', function () {
         it("Should get all todos", function (done) {
-            todoactions.getAllTodos(200, false);
-            done();
-        })
+            todoactions.getAllTodos(200, false, done);
+        });
     });
 
     describe('#GET / todo by existing id', function () {

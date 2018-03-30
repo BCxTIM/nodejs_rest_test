@@ -1,10 +1,13 @@
 var exports = module.exports = {};
+require('dotenv').load();
+
 
 
 var supertest = require('supertest');
-const url = "http://localhost:5000";
+const url = process.env.HOST + process.env.PORT;
 var api = supertest(url);
 var should = require('should');
+
 
 
 /**
@@ -12,12 +15,14 @@ var should = require('should');
  * @HTTP status
  * @boolean error
  */
-exports.getAllTodos = function (status, error) {
+exports.getAllTodos = function (status, error, done) {
     api
         .get('/todos')
         .end(function (err, res) {
+            if(err) throw err;
             res.statusCode.should.equal(status);
             res.body.error.should.equal(error);
+            done();
         });
 };
 
@@ -32,6 +37,7 @@ exports.getTodoById = function (id, status, error, callback) {
     api
         .get('/todo/' + id)
         .end(function (err, res) {
+            if(err) throw  err;
             res.statusCode.should.equal(status);
             res.body.error.should.equal(error);
             if (res.body.error) {
@@ -54,6 +60,7 @@ exports.createTodo = function (status, error, todo, callback) {
         .post('/todo')
         .send(todo)
         .end(function (err, res) {
+            if(err) throw  err;
             res.statusCode.should.equal(status);
             res.body.error.should.equal(error);
             if (error) {
