@@ -227,6 +227,12 @@ describe("Update todos", function () {
             });
         });
 
+        it("Should not update existing todo", function (done) {
+            todoactions.updateTodo(todo, 400, true, function () {
+                done();
+            });
+        });
+
         it("should get existing todo after update", function (done) {
             todoactions.getTodoById(100, 200, false, function (response) {
                 actualTodo = response;
@@ -302,4 +308,27 @@ describe("Update todos", function () {
             });
         });
     });
+
+    describe("Update the status", function () {
+        var expectedTodo = new Todo(100, "Update status", 80);
+        var actualTodo;
+
+        it("Should not update existing todo", function (done) {
+            todoactions.updateTodo(expectedTodo, 200, false, function () {
+                done();
+            });
+        });
+
+        it("should get existing todo", function (done) {
+            todoactions.getTodoById(expectedTodo.id, 200, false, function (response) {
+                actualTodo = response;
+                done();
+            });
+        });
+
+        it("verify that todo status was updated", function (done) {
+            todoactions.verifyTodoBodyById(expectedTodo, actualTodo);
+            done();
+        });
+    })
 });
