@@ -84,7 +84,7 @@ exports.createTodo = function (status, error, todo, callback) {
  * @param actualTodo
  */
 
-exports.verifyTodoBodyById = function (id, expectedTodo, actualTodo) {
+exports.verifyTodoBodyById = function (expectedTodo, actualTodo) {
     actualTodo.data.task.should.equal(expectedTodo.task);
     if (isEmpty(expectedTodo.status)) {
         actualTodo.data.status.should.equal(1);
@@ -103,6 +103,26 @@ exports.searchTodoByTaskName = function (keyword, status, error, callback) {
             res.body.error.should.equal(error);
             if(error) {
                 res.body.data.should.equal("Todo with keyword " + keyword + " not found")
+            }
+            callback(res.body);
+        });
+};
+
+
+exports.updateTodo = function (todo, status, error, callback) {
+    api
+        .put('/todo')
+        .send(todo)
+        .end(function (err, res) {
+            if(err) throw err;
+            res.statusCode.should.equal(status);
+            res.body.error.should.equal(error);
+            if(error) {
+                if(isEmpty(todo.task)) {
+                    res.body.data.should.equal("Task can not be empty")
+                } else {
+                    res.body.data.should.equal("not found task with id " + todo.id);
+                }
             }
             callback(res.body);
         });
