@@ -34,6 +34,7 @@ exports.getAllTodos = function (status, error, done) {
  */
 
 exports.getTodoById = function (id, status, error, callback) {
+    console.log("Tim" + id);
     api
         .get('/todo/' + id)
         .end(function (err, res) {
@@ -123,6 +124,24 @@ exports.updateTodo = function (todo, status, error, callback) {
                 } else {
                     res.body.data.should.equal("not found task with id " + todo.id);
                 }
+            }
+            callback(res.body);
+        });
+};
+
+exports.deleteTodo = function (id, status, error, callback) {
+    console.log(id);
+    api
+        .delete('/todo')
+        .send({id: id})
+        .end(function (err, res) {
+            if(err) throw err;
+            res.statusCode.should.equal(status);
+            res.body.error.should.equal(error);
+            if(error) {
+                res.body.data.should.equal('not found task with id ' + id);
+            } else {
+                res.body.data.should.equal('Task with id ' + id + ' was deleted successfully');
             }
             callback(res.body);
         });

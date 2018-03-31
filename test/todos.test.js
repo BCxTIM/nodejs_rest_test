@@ -332,3 +332,43 @@ describe("Update todos", function () {
         });
     })
 });
+
+
+describe("Delete todo", function () {
+    var createdTodo;
+    describe("pre-conditions", function () {
+        var todo = new Todo(null, "Delete todo");
+        it("Create todo", function (done) {
+            todoactions.createTodo(200, false, todo, function (response) {
+                createdTodo = response;
+                done();
+            });
+        });
+        it("verify that todo for deleting created", function (done) {
+            todoactions.getTodoById(createdTodo.data.id, 200, false, function () {
+                done();
+            });
+        });
+    });
+
+    describe("Deleting existing todo", function () {
+        it("Should delete existing todo", function (done) {
+            todoactions.deleteTodo(createdTodo.data.id, 200, false, function () {
+                done();
+            });
+        });
+        it("verify that todo was deleted successfully", function (done) {
+            todoactions.getTodoById(createdTodo.data.id, 400, true, function () {
+                done();
+            });
+        });
+    });
+
+    describe("Try to delete non existing todo", function () {
+        it("Can not delete existing todo", function (done) {
+            todoactions.deleteTodo(createdTodo.data.id, 404, true, function () {
+                done();
+            });
+        });
+    });
+});
