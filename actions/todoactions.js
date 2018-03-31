@@ -93,6 +93,21 @@ exports.verifyTodoBodyById = function (id, expectedTodo, actualTodo) {
     }
 };
 
+
+exports.searchTodoByTaskName = function (keyword, status, error, callback) {
+    api
+        .get('/todo/search/' + keyword)
+        .end(function (err, res) {
+            if(err) throw err;
+            res.statusCode.should.equal(status);
+            res.body.error.should.equal(error);
+            if(error) {
+                res.body.data.should.equal("Todo with keyword " + keyword + " not found")
+            }
+            callback(res.body);
+        });
+};
+
 function isEmpty(value) {
     return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
 }

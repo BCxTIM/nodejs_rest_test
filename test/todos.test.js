@@ -119,3 +119,20 @@ describe("Testing creation todo", function () {
 });
 
 
+describe("Search todo", function () {
+    describe("Search existing todo by task", function () {
+        it("Should return existing todo", function (done) {
+            todoactions.searchTodoByTaskName("tim", 200, false, function () {
+                done();
+            });
+        });
+    });
+
+    describe("Search not existing todo by task", function () {
+        it("Should return 404", function (done) {
+            todoactions.searchTodoByTaskName("kkfkgfkgfkgkgf", 404, true, function () {
+                done();
+            });
+        });
+    });
+});
