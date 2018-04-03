@@ -3,10 +3,10 @@ require('dotenv').load();
 
 
 
-var supertest = require('supertest');
+const supertest = require('supertest');
 const url = process.env.HOST + process.env.PORT;
-var api = supertest(url);
-var should = require('should');
+const api = supertest(url);
+const should = require('should');
 
 
 

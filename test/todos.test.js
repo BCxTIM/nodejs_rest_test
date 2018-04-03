@@ -1,7 +1,7 @@
 'use strict'
 
-var todoactions = require('../actions/todoactions');
-var Todo = require('../models/todo');
+const todoactions = require('../actions/todoactions');
+const Todo = require('../models/todo');
 
 describe("Get todos", function () {
     describe('#GET / todos', function () {
@@ -18,18 +18,13 @@ describe("Get todos", function () {
         })
     });
 
-    describe('#GET / todo by not existing id', function () {
-        it("should not get todo by not existing id", function (done) {
-            todoactions.getTodoById(666, 400, true, function () {
-                done();
-            });
-        });
-    });
-
-    describe('#GET / todo by not incorrect id', function () {
-        it("should not get todo by incorrect id", function (done) {
-            todoactions.getTodoById("dsadsad", 400, true, function () {
-                done();
+    let nonExitingIds = [-100,66666, "dsadadad"];
+    nonExitingIds.forEach(function (id) {
+        describe('#GET / todo by not existing id', function () {
+            it("should not get todo by not existing id", function (done) {
+                todoactions.getTodoById(id, 400, true, function () {
+                    done();
+                });
             });
         });
     });
@@ -39,8 +34,8 @@ describe("Get todos", function () {
 describe("Testing creation todo", function () {
     describe("Create valid todo without to set status", function () {
         let expectedTodo = new Todo(null, "Tim todo");
-        var result;
-        var actualTodo;
+        let result;
+        let actualTodo;
         it("Should create a new todo with default status 1", function (done) {
             todoactions.createTodo(201, false, expectedTodo, function (response) {
                 result = response;
@@ -60,9 +55,9 @@ describe("Testing creation todo", function () {
         });
     });
     describe("Create valid todo with  status 2", function () {
-        let expectedTodo = new Todo(null, "Tim todo");
-        var result;
-        var actualTodo;
+        let expectedTodo = new Todo(null, "Tim todo", 2);
+        let result;
+        let actualTodo;
         it("Should create a new todo with status 2", function (done) {
             todoactions.createTodo(201, false, expectedTodo, function (response) {
                 result = response;
@@ -85,7 +80,7 @@ describe("Testing creation todo", function () {
 
     describe("Try create todo without task", function () {
         let expectedTodo = new Todo();
-        var result;
+        let result;
         it("Try to create todo without task", function (done) {
             todoactions.createTodo(400, true, expectedTodo, function (response) {
                 result = response;
@@ -102,7 +97,7 @@ describe("Testing creation todo", function () {
 
     describe("Try create todo with null values", function () {
         let expectedTodo = new Todo(null, null, null);
-        var result;
+        let result;
         it("Try to create todo without task", function (done) {
             todoactions.createTodo(400, true, expectedTodo, function (response) {
                 result = response;
@@ -138,55 +133,36 @@ describe("Search todo", function () {
 });
 
 describe("Update todos", function () {
-    describe("Update existing todo with task", function () {
-        var expectedTodo = new Todo(100, "Update1");
-        var actualTodo;
+    var tasksNames = ['Update1', 'undefined', 'null'];
+    tasksNames.forEach(function (taskName) {
+        describe("Update existing todo with task name '" + taskName + "'", function () {
+            let expectedTodo = new Todo(100, taskName);
+            let actualTodo;
 
-        it("Should update existing todo", function (done) {
-            todoactions.updateTodo(expectedTodo, 201, false, function () {
+            it("Should update existing todo", function (done) {
+                todoactions.updateTodo(expectedTodo, 201, false, function () {
+                    done();
+                });
+            });
+
+            it("should get existing todo", function (done) {
+                todoactions.getTodoById(expectedTodo.id, 200, false, function (response) {
+                    actualTodo = response;
+                    done();
+                });
+            });
+
+            it("verify that todo was updated", function (done) {
+                todoactions.verifyTodoBodyById(expectedTodo, actualTodo);
                 done();
             });
-        });
-
-        it("should get existing todo", function (done) {
-            todoactions.getTodoById(expectedTodo.id, 200, false, function (response) {
-                actualTodo = response;
-                done();
-            });
-        });
-
-        it("verify that todo was updated", function (done) {
-            todoactions.verifyTodoBodyById(expectedTodo, actualTodo);
-            done();
         });
     });
 
-    describe("Update existing todo with task undefined", function () {
-        var expectedTodo = new Todo(100, "undefined");
-        var actualTodo;
-        it("Should update existing todo", function (done) {
-            todoactions.updateTodo(expectedTodo, 201, false, function () {
-                done();
-            });
-        });
-
-        it("should get existing todo", function (done) {
-            todoactions.getTodoById(expectedTodo.id, 200, false, function (response) {
-                actualTodo = response;
-                done();
-            });
-        });
-
-        it("verify that todo was updated", function (done) {
-            todoactions.verifyTodoBodyById(expectedTodo, actualTodo);
-            done();
-        });
-    });
-
-    describe("Try to update existing todo with task type of undefined", function () {
-        var todo = new Todo(100);
-        var expectedTodo;
-        var actualTodo;
+    describe("Try to update existing todo with task name type of undefined", function () {
+        let todo = new Todo(100);
+        let expectedTodo;
+        let actualTodo;
 
         it("should get existing todo", function (done) {
             todoactions.getTodoById(100, 200, false, function (response) {
@@ -214,10 +190,10 @@ describe("Update todos", function () {
         });
     });
 
-    describe("Try to update existing todo with task is empty", function () {
-        var todo = new Todo(100, "");
-        var expectedTodo;
-        var actualTodo;
+    describe("Try to update existing todo with task name  empty", function () {
+        let todo = new Todo(100, "");
+        let expectedTodo;
+        let actualTodo;
 
         it("should get existing todo", function (done) {
             todoactions.getTodoById(100, 200, false, function (response) {
@@ -245,33 +221,11 @@ describe("Update todos", function () {
         });
     });
 
-    describe("Update existing todo with task is null", function () {
-        var expectedTodo = new Todo(100, "null");
-        var actualTodo;
 
-        it("Should not update existing todo", function (done) {
-            todoactions.updateTodo(expectedTodo, 201, false, function () {
-                done();
-            });
-        });
-
-        it("should get existing todo", function (done) {
-            todoactions.getTodoById(expectedTodo.id, 200, false, function (response) {
-                actualTodo = response;
-                done();
-            });
-        });
-
-        it("verify that todo was updated", function (done) {
-            todoactions.verifyTodoBodyById(expectedTodo, actualTodo);
-            done();
-        });
-    });
-
-    describe("Try to update existing todo with task type of is null", function () {
-        var todo = new Todo(100, "");
-        var expectedTodo;
-        var actualTodo;
+    describe("Try to update existing todo with task name type of is null", function () {
+        let todo = new Todo(100, null);
+        let expectedTodo;
+        let actualTodo;
 
         it("should get existing todo", function (done) {
             todoactions.getTodoById(100, 200, false, function (response) {
@@ -299,8 +253,8 @@ describe("Update todos", function () {
         });
     });
 
-    describe("Try to update non existing todo with task", function () {
-        var todo = new Todo("new one");
+    describe("Try to update non existing todo with task name 'new one'", function () {
+        let todo = new Todo("new one");
         it("Should show error that task id not exist in DB", function (done) {
             todoactions.updateTodo(todo, 400, true, function () {
                 done();
@@ -309,8 +263,8 @@ describe("Update todos", function () {
     });
 
     describe("Update the status", function () {
-        var expectedTodo = new Todo(100, "Update status", 80);
-        var actualTodo;
+        let expectedTodo = new Todo(100, "Update status", 80);
+        let actualTodo;
 
         it("Should not update existing todo", function (done) {
             todoactions.updateTodo(expectedTodo, 201, false, function () {
@@ -334,9 +288,9 @@ describe("Update todos", function () {
 
 
 describe("Delete todo", function () {
-    var createdTodo;
+    let createdTodo;
     describe("pre-conditions", function () {
-        var todo = new Todo(null, "Delete todo");
+        let todo = new Todo(null, "Delete todo");
         it("Create todo", function (done) {
             todoactions.createTodo(201, false, todo, function (response) {
                 createdTodo = response;
