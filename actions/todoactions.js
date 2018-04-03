@@ -34,7 +34,6 @@ exports.getAllTodos = function (status, error, done) {
  */
 
 exports.getTodoById = function (id, status, error, callback) {
-    console.log("Tim" + id);
     api
         .get('/todo/' + id)
         .end(function (err, res) {
@@ -130,7 +129,6 @@ exports.updateTodo = function (todo, status, error, callback) {
 };
 
 exports.deleteTodo = function (id, status, error, callback) {
-    console.log(id);
     api
         .delete('/todo')
         .send({id: id})

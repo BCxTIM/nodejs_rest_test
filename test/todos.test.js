@@ -42,7 +42,7 @@ describe("Testing creation todo", function () {
         var result;
         var actualTodo;
         it("Should create a new todo with default status 1", function (done) {
-            todoactions.createTodo(200, false, expectedTodo, function (response) {
+            todoactions.createTodo(201, false, expectedTodo, function (response) {
                 result = response;
                 done();
             });
@@ -61,11 +61,10 @@ describe("Testing creation todo", function () {
     });
     describe("Create valid todo with  status 2", function () {
         let expectedTodo = new Todo(null, "Tim todo");
-        console.log(expectedTodo);
         var result;
         var actualTodo;
         it("Should create a new todo with status 2", function (done) {
-            todoactions.createTodo(200, false, expectedTodo, function (response) {
+            todoactions.createTodo(201, false, expectedTodo, function (response) {
                 result = response;
                 done();
             });
@@ -144,7 +143,7 @@ describe("Update todos", function () {
         var actualTodo;
 
         it("Should update existing todo", function (done) {
-            todoactions.updateTodo(expectedTodo, 200, false, function () {
+            todoactions.updateTodo(expectedTodo, 201, false, function () {
                 done();
             });
         });
@@ -166,7 +165,7 @@ describe("Update todos", function () {
         var expectedTodo = new Todo(100, "undefined");
         var actualTodo;
         it("Should update existing todo", function (done) {
-            todoactions.updateTodo(expectedTodo, 200, false, function () {
+            todoactions.updateTodo(expectedTodo, 201, false, function () {
                 done();
             });
         });
@@ -251,7 +250,7 @@ describe("Update todos", function () {
         var actualTodo;
 
         it("Should not update existing todo", function (done) {
-            todoactions.updateTodo(expectedTodo, 200, false, function () {
+            todoactions.updateTodo(expectedTodo, 201, false, function () {
                 done();
             });
         });
@@ -314,7 +313,7 @@ describe("Update todos", function () {
         var actualTodo;
 
         it("Should not update existing todo", function (done) {
-            todoactions.updateTodo(expectedTodo, 200, false, function () {
+            todoactions.updateTodo(expectedTodo, 201, false, function () {
                 done();
             });
         });
@@ -339,7 +338,7 @@ describe("Delete todo", function () {
     describe("pre-conditions", function () {
         var todo = new Todo(null, "Delete todo");
         it("Create todo", function (done) {
-            todoactions.createTodo(200, false, todo, function (response) {
+            todoactions.createTodo(201, false, todo, function (response) {
                 createdTodo = response;
                 done();
             });
